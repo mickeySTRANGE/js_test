@@ -1,0 +1,43 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var totalCount = parseInt(localStorage.getItem('totalAccess'));
+      var sessionCount = parseInt(sessionStorage.getItem('sessionAccess'));
+      if (isNaN(totalCount)) {
+        localStorage.setItem('totalAccess', '0');
+        totalCount = 0;
+      }
+      if (isNaN(sessionCount)) {
+        sessionStorage.setItem('sessionAccess', '0');
+        sessionCount = 0;
+      }
+      totalCount++;
+      sessionCount++;
+      localStorage.setItem('totalAccess', totalCount.toString(10));
+      sessionStorage.setItem('sessionAccess', sessionCount.toString(10));
+      $('#total').text(totalCount);
+      $('#session').text(sessionCount);
+    });
+    $(document).on('click', '#resetButton', function() {
+      localStorage.setItem('totalAccess', '0');
+      sessionStorage.setItem('sessionAccess', '0');
+      $('#total').text(0);
+      $('#session').text(0);
+    });
+
+  </script>
+</head>
+
+<body>
+  <div>
+    今回のアクセスは<span id="total"></span>回目です。<br> ブラウザを開いてからは
+    <span id="session"></span>回目です。
+  </div>
+  <a id="resetButton" class="btn" style="background-color: aquamarine">リセット</a>
+</body>
+
+</html>
