@@ -33,11 +33,18 @@
     // DBに接続する
     function openDB() {
       var openRequest = indexedDB.open("AccessCountTest");
+      // 接続に成功すれば各処理を実行
       openRequest.onsuccess = function(event) {
         db = event.target.result;
         db.onerror = function(event) {
           alert("Database error: " + event.target.errorCode);
         };
+        udpateTotalCount();
+        // リセット処理にもDBが必要なので接続されてからイベントを設定する
+        $('#resetButton').show();
+        $(document).on('click', '#resetButton', function() {
+          resetTotalCount();
+        });
       };
 
       // DB定義を更新
@@ -55,36 +62,10 @@
       };
     }
 
-    var checkCount = 0;
-    var checkInterval = null;
-
-    // DB接続を待って初期表示を行う
-    function dispCount() {
-      checkInterval = setInterval(
-        function() {
-          if (db == null) {
-            checkCount++;
-            if (checkCount > 10) {
-              clearInterval(checkInterval);
-              alert('DBオープンに失敗しました。');
-            }
-          } else {
-            clearInterval(checkInterval);
-            udpateTotalCount();
-            // リセット処理にもDBが必要なので接続されてからイベントを設定する
-            $('#resetButton').show();
-            $(document).on('click', '#resetButton', function() {
-              resetTotalCount();
-            });
-          }
-        }, 100);
-    }
-
     $(document).ready(function() {
       // 開発中にDBリセットするための削除構文
       //      window.indexedDB.deleteDatabase("AccessCountTest");
       openDB();
-      dispCount();
     });
 
   </script>
